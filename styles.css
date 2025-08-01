@@ -1,0 +1,80 @@
+body {
+  margin: 0;
+  font-family: 'Open Sans', sans-serif;
+  background: linear-gradient(to right, #3b5998, #8b9dc3);
+  color: #333;
+  animation: fadeIn 1s ease-in-out;
+}
+
+.jeevani-header {
+  font-family: 'Orbitron', sans-serif;
+  font-size: 3rem;
+  color: #fff;
+  text-align: center;
+  margin-top: 30px;
+}
+
+footer {
+  text-align: center;
+  color: #fff;
+  margin-top: 40px;
+  padding-bottom: 20px;
+}
+
+.login-container, .center-box, .dashboard .card {
+  background-color: white;
+  padding: 2rem;
+  border-radius: 10px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+  max-width: 400px;
+  margin: auto;
+  text-align: center;
+  animation: slideUp 1s ease;
+}
+
+input[type="email"], input[type="password"] {
+  width: 90%;
+  padding: 12px;
+  margin: 10px 0;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  font-size: 1rem;
+}
+
+.btn {
+  background-color: #3b5998;
+  color: white;
+  padding: 12px;
+  border: none;
+  border-radius: 8px;
+  font-size: 1rem;
+  margin-top: 10px;
+  cursor: pointer;
+  width: 90%;
+  transition: background 0.3s;
+}
+
+.btn:hover {
+  background-color: #2d4373;
+}
+
+.link-text {
+  font-size: 0.9rem;
+  margin-top: 1rem;
+}
+
+.link-text a {
+  color: #3b5998;
+  text-decoration: none;
+  font-weight: bold;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes slideUp {
+  from { transform: translateY(50px); opacity: 0; }
+  to { transform: translateY(0); opacity: 1; }
+}

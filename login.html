@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Login | Jeevani</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@700&family=Open+Sans&display=swap" rel="stylesheet" />
+  <style>
+    body {
+      margin: 0;
+      padding: 0;
+      font-family: 'Open Sans', sans-serif;
+      background: linear-gradient(to right, #dbe9f4, #ffffff);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      animation: fadeIn 1s ease-in-out;
+    }
+
+    .login-box {
+      background: white;
+      padding: 2rem;
+      border-radius: 12px;
+      box-shadow: 0 6px 20px rgba(0, 0, 0, 0.2);
+      width: 90%;
+      max-width: 400px;
+      animation: slideUp 0.8s ease;
+    }
+
+    .login-box h1 {
+      font-family: 'Orbitron', sans-serif;
+      text-align: center;
+      color: #3b5998;
+      font-size: 2rem;
+      margin-bottom: 1.5rem;
+    }
+
+    .input-group {
+      margin-bottom: 1rem;
+    }
+
+    .input-group label {
+      display: block;
+      margin-bottom: 0.4rem;
+      font-weight: bold;
+    }
+
+    .input-group input {
+      width: 100%;
+      padding: 0.7rem;
+      border-radius: 6px;
+      border: 1px solid #ccc;
+      font-size: 1rem;
+    }
+
+    .btn {
+      width: 100%;
+      padding: 0.8rem;
+      background-color: #3b5998;
+      color: white;
+      border: none;
+      border-radius: 6px;
+      font-size: 1rem;
+      cursor: pointer;
+      transition: 0.3s;
+    }
+
+    .btn:hover {
+      background-color: #2d4373;
+    }
+
+    .error {
+      color: red;
+      text-align: center;
+      margin-top: 1rem;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; }
+      to { opacity: 1; }
+    }
+
+    @keyframes slideUp {
+      from { transform: translateY(40px); opacity: 0; }
+      to { transform: translateY(0); opacity: 1; }
+    }
+
+    footer {
+      position: absolute;
+      bottom: 10px;
+      width: 100%;
+      text-align: center;
+      font-size: 0.85rem;
+      color: #666;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="login-box">
+    <h1>Login to Jeevani</h1>
+    <div class="input-group">
+      <label for="username">Username</label>
+      <input type="text" id="username" placeholder="Enter username" />
+    </div>
+    <div class="input-group">
+      <label for="password">Password</label>
+      <input type="password" id="password" placeholder="Enter password" />
+    </div>
+    <button class="btn" onclick="handleLogin()">Login</button>
+    <div class="error" id="error-message"></div>
+  </div>
+
+  <footer>@2025 Jeevani developed by Stalin</footer>
+
+  <script>
+    function handleLogin() {
+      const username = document.getElementById("username").value.trim();
+      const password = document.getElementById("password").value.trim();
+      const errorBox = document.getElementById("error-message");
+
+      if (username === "jeevani" && password === "jeevani@1234") {
+        window.location.href = "dashboard.html";
+      } else {
+        errorBox.textContent = "Incorrect username or password";
+      }
+    }
+  </script>
+</body>
+</html>

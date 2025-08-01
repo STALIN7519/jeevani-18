@@ -1,0 +1,242 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Dashboard | Jeevani</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@700&family=Open+Sans&display=swap" rel="stylesheet">
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: 'Open Sans', sans-serif;
+      background: linear-gradient(to right, #cceeff, #a8e0f0);
+      animation: fadeIn 1s ease-in;
+      padding-bottom: 60px;
+    }
+
+    header {
+      background-color: #3b5998;
+      color: white;
+      padding: 1.2rem 1rem;
+      text-align: center;
+      font-family: 'Orbitron', sans-serif;
+      font-size: 2rem;
+      letter-spacing: 2px;
+    }
+
+    .container {
+      display: flex;
+      flex-direction: column;
+      max-width: 600px;
+      margin: auto;
+      padding: 1rem;
+      gap: 1.5rem;
+    }
+
+    .card {
+      background-color: white;
+      border-radius: 15px;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+      padding: 1.5rem;
+      animation: slideUp 0.5s ease;
+    }
+
+    .card h2 {
+      font-size: 1.4rem;
+      color: #2b3e8c;
+      margin-bottom: 1rem;
+    }
+
+    .data-row {
+      margin: 0.6rem 0;
+      font-size: 1rem;
+    }
+
+    .data-row strong {
+      display: inline-block;
+      width: 130px;
+    }
+
+    .btn {
+      background-color: #3b5998;
+      color: white;
+      padding: 12px 20px;
+      margin: 0.4rem 0.5rem 0.2rem 0;
+      border: none;
+      border-radius: 8px;
+      font-size: 0.95rem;
+      cursor: pointer;
+      transition: background 0.3s ease;
+    }
+
+    .btn:hover {
+      background-color: #2d4373;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 1rem;
+      font-size: 0.9rem;
+    }
+
+    th, td {
+      padding: 10px;
+      border: 1px solid #ddd;
+    }
+
+    th {
+      background-color: #dcefff;
+    }
+
+    footer {
+      text-align: center;
+      font-size: 0.9rem;
+      margin-top: 2rem;
+      color: #444;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; }
+      to { opacity: 1; }
+    }
+
+    @keyframes slideUp {
+      from { opacity: 0; transform: translateY(30px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    @media (max-width: 600px) {
+      .container {
+        padding: 1rem 0.8rem;
+      }
+
+      .card h2 {
+        font-size: 1.2rem;
+      }
+
+      .btn {
+        width: 100%;
+        margin: 0.4rem 0;
+      }
+
+      .data-row strong {
+        width: 100px;
+      }
+
+      table {
+        font-size: 0.8rem;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <header>Jeevani</header>
+
+  <div class="container">
+
+    <!-- Flow Rate Monitor -->
+    <div class="card">
+      <h2>💧 Flow Rate Monitor</h2>
+      <div class="data-row"><strong>Flow Rate:</strong> <span id="flow-rate">--</span> mL/min</div>
+      <div class="data-row"><strong>Saline Type:</strong> <span id="saline-type">--</span></div>
+      <div class="data-row"><strong>Status:</strong> <span id="status">--</span></div>
+      <div class="data-row"><strong>Last Updated:</strong> <span id="updated">--</span></div>
+    </div>
+
+    <!-- Live Camera -->
+    <div class="card">
+      <h2>📷 Live Camera (ESP32-CAM)</h2>
+      <button class="btn" onclick="window.open('http://your-esp32-cam-ip/', '_blank')">📺 Live Feed</button>
+    </div>
+
+    <!-- Flow Control -->
+    <div class="card">
+      <h2>🔴 Flow Control</h2>
+      <button class="btn" onclick="controlFlow('start')">Start Flow</button>
+      <button class="btn" onclick="controlFlow('stop')">Stop Flow</button>
+    </div>
+
+    <!-- Flow Log Table -->
+    <div class="card">
+      <h2>📊 Daily Flow Rate Log</h2>
+      <table>
+        <thead>
+          <tr>
+            <th>Time</th>
+            <th>Flow Rate</th>
+            <th>Saline Type</th>
+            <th>Status</th>
+          </tr>
+        </thead>
+        <tbody id="log-table">
+          <tr><td colspan="4">Loading...</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <footer>@2025 Jeevani developed by Stalin</footer>
+
+  <script type="module" src="supabase.js"></script>
+  <script>
+    async function fetchLatestData() {
+      const { data, error } = await supabase
+        .from('flow_logs')
+        .select('*')
+        .order('timestamp', { ascending: false })
+        .limit(1);
+
+      if (data && data.length > 0) {
+        const latest = data[0];
+        document.getElementById('flow-rate').textContent = latest.flow_rate;
+        document.getElementById('saline-type').textContent = latest.saline_type;
+        document.getElementById('status').textContent = latest.status;
+        document.getElementById('updated').textContent = new Date(latest.timestamp).toLocaleString();
+      }
+    }
+
+    async function fetchLogTable() {
+      const { data, error } = await supabase
+        .from('flow_logs')
+        .select('*')
+        .order('timestamp', { ascending: false })
+        .limit(10);
+
+      const tbody = document.getElementById('log-table');
+      tbody.innerHTML = '';
+      data.forEach(row => {
+        const tr = document.createElement('tr');
+        tr.innerHTML = `
+          <td>${new Date(row.timestamp).toLocaleTimeString()}</td>
+          <td>${row.flow_rate}</td>
+          <td>${row.saline_type}</td>
+          <td>${row.status}</td>
+        `;
+        tbody.appendChild(tr);
+      });
+    }
+
+    async function controlFlow(action) {
+      const endpoint = `http://your-esp32-ip/${action}`;
+      try {
+        await fetch(endpoint);
+        alert(`${action} request sent to ESP32`);
+      } catch (err) {
+        alert("ESP32 not reachable");
+      }
+    }
+
+    fetchLatestData();
+    fetchLogTable();
+    setInterval(fetchLatestData, 5000);
+  </script>
+
+</body>
+</html>
